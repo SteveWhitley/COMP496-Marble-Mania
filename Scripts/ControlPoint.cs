@@ -5,9 +5,9 @@ using UnityEngine;
 public class ControlPoint : MonoBehaviour
 {
     float xRot, yRot = 0f;
-
+    public GameObject Marblemania;
     public Rigidbody ball;
-
+    public GameObject marble;
     public float rotationSpeed = 5f;
 
     public float shootPower = 20f;
@@ -15,14 +15,18 @@ public class ControlPoint : MonoBehaviour
     public float moveSpeed;
     float horizontalInput;
     float verticalInput;
-    bool inMotion = false;
-    bool turnTaken = false;
+    public bool inMotion = false;
+    public bool turnTaken = false;
     Vector3 moveDirection;
-
     public LineRenderer line;
+
     // Update is called once per frame
-    void Start() {
+    void Start() 
+    {
+        
         ball.useGravity = false;
+        int Player = LayerMask.NameToLayer("Player");
+        marble.layer = Player;
     }
 
     void Update()
@@ -48,7 +52,7 @@ public class ControlPoint : MonoBehaviour
             }    
         }
     }
-
+    // Allows the user to look in a direction by holding Rightclick, and shoot their marble with Leftclick
     private void MyInput() 
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -66,18 +70,29 @@ public class ControlPoint : MonoBehaviour
             inMotion = true;
             ball.constraints = RigidbodyConstraints.None;
             ball.useGravity = true;
+            int Default = LayerMask.NameToLayer("Default");
+            marble.layer = Default;
             ball.velocity=transform.forward * shootPower;
             StartCoroutine(timeout());
         }
     }
 
+    // Called to stop the player's turn when the marble is shot (may need tweaking when powers are implemented!)
     IEnumerator timeout() 
     {
-        yield return new WaitForSeconds(5);
-        inMotion = false;
         turnTaken = true;
+        yield return new WaitForSeconds(5);
+        ball.constraints = RigidbodyConstraints.FreezePosition;
+        yield return new WaitForSeconds(1);
+        inMotion = false;
+        Start();
+        PlayerTurn turn = Marblemania.GetComponent<PlayerTurn>();
+        turn.TurnSwitch();
+        inMotion = false;
+        turnTaken = false;
     }
 
+    // Allows the player to move with WASD
     private void MovePlayer() 
     {
         ball.constraints = RigidbodyConstraints.None;
@@ -85,6 +100,7 @@ public class ControlPoint : MonoBehaviour
         ball.AddForce(moveDirection.normalized * moveSpeed * 7f, ForceMode.Force);
     }
 
+    // Stops the marble if the player isn't putting any input (even in midair!)
     private void freezeControl() 
     {
         if (horizontalInput == 0.0 && verticalInput == 0.0) {
@@ -92,6 +108,7 @@ public class ControlPoint : MonoBehaviour
         } 
     }
 
+    // Stops the player from going too fast adjusting their shot
     private void SpeedControl() 
     {
         Vector3 flatVel = new Vector3(ball.velocity.x, 0f, ball.velocity.z);
