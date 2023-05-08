@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class MarblesLeft : MonoBehaviour
 {
-    int marbleCounter;
-    public GameObject arena;
+    public int marbleCounter = 0;
     public ScoreSystem score;
     public GameObject BMarbles;
     public GameObject GMarbles;
     public Text marblesLeft;
+
     IEnumerator gameEnd() 
     {
         int player1Score = score.p1Score;
@@ -23,19 +23,19 @@ public class MarblesLeft : MonoBehaviour
         } else {
             marblesLeft.text = "Tie!";
         }
+        yield return new WaitForSeconds(5);
+        Application.LoadLevel(Application.loadedLevel);
     }
 
     //takes count of the marbles in the arena
-    private void OnTriggerEnter(Collider other) 
+    public void marbleAdd() 
     {
-        if (other.gameObject.CompareTag("greenMarble") || other.gameObject.CompareTag("blueMarble")) 
-        {
-            marbleCounter++;
-            marblesLeft.text = "Marbles Left: " + marbleCounter;
-        }
+        marbleCounter+= 1;
+        marblesLeft.text = "Marbles Left: " + marbleCounter;
+        
     }
 
-    private void OnTriggerExit(Collider other) 
+    public void OnTriggerExit(Collider other) 
     {
         if (other.gameObject.CompareTag("greenMarble") || other.gameObject.CompareTag("blueMarble")) 
         {

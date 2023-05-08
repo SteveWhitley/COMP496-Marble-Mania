@@ -12,6 +12,7 @@ public class ScoreSystem : MonoBehaviour
     public Text p1ScoreBoard;
     public Text p2ScoreBoard;
     public AudioSource scored;
+    public MarblesLeft marblesLeft;
 
     // Tracks each player's score
     public int p1Score;
@@ -25,6 +26,14 @@ IEnumerator destroyMarble(GameObject other)
         Destroy(other);
     }
 
+    private void OnTriggerEnter(Collider other) 
+    {
+        if (other.gameObject.CompareTag("greenMarble") || other.gameObject.CompareTag("blueMarble")) 
+            {
+                marblesLeft.marbleAdd();
+            }
+    }
+ 
     // detects whenever a scored marble leaves the arena
     private void OnTriggerExit(Collider other) 
     {
