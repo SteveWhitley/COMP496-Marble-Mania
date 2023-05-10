@@ -33,40 +33,40 @@ IEnumerator destroyMarble(GameObject other)
                 marblesLeft.marbleAdd();
             }
     }
- 
+
     // detects whenever a scored marble leaves the arena
-    private void OnTriggerExit(Collider other) 
+private void OnTriggerExit(Collider other) 
+{
+    // normal score green marbles
+    if (other.gameObject.CompareTag("greenMarble")) 
     {
-        // normal score green marbles
-        if (other.gameObject.CompareTag("greenMarble")) 
+        if (playerTurn.Player1Turn)
         {
-            if (playerTurn.Player1Turn)
-            {
-                p1Score += 1;
-                p1ScoreBoard.text = "P1 Score: " + p1Score;
-            } else 
-            {
-                p2Score += 1;
-                p2ScoreBoard.text = p2Score + " :P2 Score";
-            }
-            StartCoroutine(destroyMarble(other.gameObject));
-            scored.Play(0); 
-        // double score blue marbles (harder to knockout)
-        } else if (other.gameObject.CompareTag("blueMarble")) 
+            p1Score += 1;
+            p1ScoreBoard.text = "P1 Score: " + p1Score;
+        } else 
         {
-            if (playerTurn.Player1Turn)
-            {
-                p1Score += 2;
-                p1ScoreBoard.text = "P1 Score: " + p1Score;
-            } else 
-            {
-                p2Score += 2;
-                p2ScoreBoard.text = p2Score + " :P2 Score";
-            }
-            StartCoroutine(destroyMarble(other.gameObject));
-            scored.Play(0);
+            p2Score += 1;
+            p2ScoreBoard.text = p2Score + " :P2 Score";
         }
-        
+        StartCoroutine(destroyMarble(other.gameObject));
+        scored.Play(0); 
+    // double score blue marbles (harder to knockout)
+    } else if (other.gameObject.CompareTag("blueMarble")) 
+    {
+        if (playerTurn.Player1Turn)
+        {
+            p1Score += 2;
+            p1ScoreBoard.text = "P1 Score: " + p1Score;
+        } else 
+        {
+            p2Score += 2;
+            p2ScoreBoard.text = p2Score + " :P2 Score";
+        }
+        StartCoroutine(destroyMarble(other.gameObject));
+        scored.Play(0);
     }
+    
+}
 }
 
