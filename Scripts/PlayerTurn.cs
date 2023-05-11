@@ -10,11 +10,16 @@ public class PlayerTurn : MonoBehaviour
     public GameObject PlayerMarble;
     public Transform Player1Spawn;
     public Transform Player2Spawn;
+    public AbilityMarbleSpawner spawner;
     // Start is called before the first frame update
     void Start()
     {
-        Player1Turn = false;
-        TurnSwitch();
+        Player1Turn = true;
+        PlayerGo.gameObject.SetActive(true);
+        PlayerGo.text = "Player 1 Go!";
+        PlayerGo.color = Color.blue;
+        PlayerMarble.transform.position =  new Vector3(Player1Spawn.position.x,Player1Spawn.position.y, Player1Spawn.position.z);
+        StartCoroutine(displayText());
     }
 
     public void TurnSwitch() 
@@ -34,6 +39,7 @@ public class PlayerTurn : MonoBehaviour
             PlayerMarble.transform.position =  new Vector3(Player1Spawn.position.x,Player1Spawn.position.y, Player1Spawn.position.z);
             StartCoroutine(displayText());
         }
+        spawner.attemptTaken = false;
     }
 
     IEnumerator displayText() 

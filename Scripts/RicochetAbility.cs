@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class RicochetAbility : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public ControlPoint control;
+    Vector3 lastVelocity;
+    public AudioSource boing;
+    
+
+    void Update() 
     {
-        
+        lastVelocity = control.ball.velocity;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void ricochet(Collision collision) {
+        boing.Play(0);
+        var speed = lastVelocity.magnitude * 1.25f;
+        var direction = Vector3.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
+        control.ball.constraints = RigidbodyConstraints.FreezePositionY;
+        control.ball.velocity = direction * Mathf.Max(speed, 4f);
     }
 }

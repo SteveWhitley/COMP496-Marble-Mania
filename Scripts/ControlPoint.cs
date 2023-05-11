@@ -8,10 +8,12 @@ public class ControlPoint : MonoBehaviour
     public GameObject Marblemania;
     public Rigidbody ball;
     public GameObject marble;
+
+
     public float rotationSpeed = 5f;
 
     public float shootPower = 20f;
-
+    public AbilityManager abilityManager;
     public float moveSpeed;
     float horizontalInput;
     float verticalInput;
@@ -82,7 +84,9 @@ public class ControlPoint : MonoBehaviour
     {
         turnTaken = true;
         yield return new WaitForSeconds(5);
+        shootPower = 20f;
         ball.constraints = RigidbodyConstraints.FreezePosition;
+        marble.GetComponent<MeshRenderer>().material = abilityManager.normalMaterial;
         yield return new WaitForSeconds(1);
         inMotion = false;
         Start();

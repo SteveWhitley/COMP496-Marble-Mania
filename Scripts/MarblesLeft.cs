@@ -11,6 +11,7 @@ public class MarblesLeft : MonoBehaviour
     public GameObject GMarbles;
     public Text marblesLeft;
 
+    //determines the winner and ends the game
     IEnumerator gameEnd() 
     {
         int player1Score = score.p1Score;
